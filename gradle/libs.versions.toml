@@ -20,9 +20,14 @@ androidxNavigation = "2.8.4"
 
 androidx-lifecycle = "2.8.7"
 
+accompanist-permissions = "0.36.0"
+
+cameraX = "1.5.0-alpha03"
+faceDetection = "16.1.7"
 
 appcompat = "1.7.0"
 material = "1.12.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,10 +55,22 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 # Navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 
+# CameraX
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraX" }
+androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraX" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraX" }
+#androidx-camera-video = { group = "androidx.camera", name = "camera-video", version.ref = "cameraX" }
+#androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
+#androidx-camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "cameraX" }
+androidx-camera-effects = { group = "androidx.camera", name = "camera-effects", version.ref = "cameraX" }
+androidx-camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "cameraX" }
+face-detection = { group = "com.google.mlkit", name = "face-detection", version.ref = "faceDetection" }
+
 # Others
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permissions" }
 
-# Added autumatic when creating new library
+# Added automatic when creating new library
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
