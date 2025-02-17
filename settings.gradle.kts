@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Playground"
 include(":app")
 include(":feature:home")
+include(":feature:camerax")

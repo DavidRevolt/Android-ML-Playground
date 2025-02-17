@@ -24,6 +24,7 @@ accompanist-permissions = "0.36.0"
 
 cameraX = "1.5.0-alpha03"
 faceDetection = "16.1.7"
+objectDetection = "17.0.2"
 
 appcompat = "1.7.0"
 material = "1.12.0"
@@ -65,6 +66,8 @@ androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycl
 androidx-camera-effects = { group = "androidx.camera", name = "camera-effects", version.ref = "cameraX" }
 androidx-camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "cameraX" }
 face-detection = { group = "com.google.mlkit", name = "face-detection", version.ref = "faceDetection" }
+obj-detection = { group = "com.google.mlkit", name = "object-detection", version.ref = "objectDetection" }
+
 
 # Others
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }

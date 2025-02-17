@@ -18,8 +18,6 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val currentSurfaceRequest by  viewModel.surfaceRequests.collectAsStateWithLifecycle()
-
     Column(
         modifier = Modifier
             .fillMaxSize(),

@@ -1,6 +1,5 @@
 package com.davidrevolt.feature.home
 
-import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
@@ -14,7 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.davidrevolt.feature.home.facedetector.FaceDetectorProcessor
-import com.davidrevolt.feature.home.facedetector.FaceOverlayEffect
 
 
 // Using CameraController Class
@@ -24,17 +22,16 @@ fun CameraXLivePreview() {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val previewView = PreviewView(context)
-    var imageProcessor = FaceDetectorProcessor()
 
-    val lensFacing = CameraSelector.DEFAULT_FRONT_CAMERA
     var cameraController = LifecycleCameraController(context)
+    val lensFacing = CameraSelector.DEFAULT_FRONT_CAMERA
     cameraController.cameraSelector = lensFacing
     previewView.controller = cameraController // Connect CameraController to preview
 
 
-    // EFFECT - FACE DRAWING
-    val faceOverlayEffect = FaceOverlayEffect(previewView = previewView)
-    cameraController.setEffects(setOf(faceOverlayEffect.overlayEffect))
+    // Setting Img Detector and EFFECT - DRAWING
+    var imageProcessor: MlKitImageProcessor  = FaceDetectorProcessor(previewView)
+    cameraController.setEffects(setOf(imageProcessor.effect.overlayEffect))
 
 
     // IMG ANALYSIS
@@ -47,20 +44,12 @@ fun CameraXLivePreview() {
             listOf(imageProcessor.detector),
             COORDINATE_SYSTEM_VIEW_REFERENCED,
             executor
-        ) { result: MlKitAnalyzer.Result? ->
-            var faces = result?.getValue(imageProcessor.detector)//Face List
-            if (faces == null) {
-                Log.e(
-                    "ImageAnalysis",
-                    "Face detection failed ${result?.getThrowable(imageProcessor.detector)?.cause.toString()}"
-                )
-            } else {
-                Log.d("ImageAnalysis", "Face Detected: ${faces.size}")
-                faceOverlayEffect.drawEffect(faces = faces, frameTimestamp = result!!.timestamp)
-            }
+        ) { mlkitResult: MlKitAnalyzer.Result? ->
+            imageProcessor.processMlKitAnalyzerResult(mlkitResult = mlkitResult)
         }
     )
     cameraController.bindToLifecycle(lifecycleOwner) //Because cameraController is Lifecycle aware
     AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
+
 }
 

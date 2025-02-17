@@ -1,20 +1,20 @@
-package com.davidrevolt.feature.home.facedetector
+package com.davidrevolt.playground.feature.camerax.detectors.facedetector
 
 
 import android.util.Log
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.PreviewView
-import com.davidrevolt.feature.home.DetectorOverlayEffect
-import com.davidrevolt.feature.home.MlKitImageProcessor
+import com.davidrevolt.playground.feature.camerax.detectors.DetectorOverlayEffect
+import com.davidrevolt.playground.feature.camerax.detectors.DetectorProcessor
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetector
 import com.google.mlkit.vision.face.FaceDetectorOptions
 
-class FaceDetectorProcessor(previewView: PreviewView) : MlKitImageProcessor {
+class FaceDetectorProcessor(previewView: PreviewView) : DetectorProcessor<Face>() {
 
     override val detector: FaceDetector // Passed to ML KIT
-    override val effect: DetectorOverlayEffect<Face>  // Passed to  cameraController.setEffects
+    override val effect: DetectorOverlayEffect<Face>
 
     init {
         val faceDetectorOptions = FaceDetectorOptions.Builder()
@@ -27,7 +27,7 @@ class FaceDetectorProcessor(previewView: PreviewView) : MlKitImageProcessor {
         effect = FaceOverlayEffect(previewView)
     }
 
-
+/*
     override fun processMlKitAnalyzerResult(mlkitResult: MlKitAnalyzer.Result?) {
         var detections = mlkitResult?.getValue(detector)// e.g: List of faces
         if (detections == null)
@@ -36,9 +36,10 @@ class FaceDetectorProcessor(previewView: PreviewView) : MlKitImageProcessor {
             onSuccess(detections = detections, frameTimestamp = mlkitResult!!.timestamp)
     }
 
+
     // gets the ML KIT Result [for frame] and draw on the same frame using the timestamp
     private fun onSuccess(detections: List<Face>, frameTimestamp: Long) {
-        Log.d("ImageAnalysis", "Detected: ${detections.size} Instances")
+        Log.i("ImageAnalysis", "Detected: ${detections.size} Instances")
         effect.drawEffect(detections, frameTimestamp)
     }
 
@@ -47,6 +48,6 @@ class FaceDetectorProcessor(previewView: PreviewView) : MlKitImageProcessor {
             "ImageAnalysis",
             "Detection failed ${throwable?.cause.toString()}"
         )
-    }
+    }*/
 
 }

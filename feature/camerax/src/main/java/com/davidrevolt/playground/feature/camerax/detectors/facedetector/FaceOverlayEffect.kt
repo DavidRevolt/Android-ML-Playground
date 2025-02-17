@@ -1,10 +1,10 @@
-package com.davidrevolt.feature.home.facedetector
+package com.davidrevolt.playground.feature.camerax.detectors.facedetector
 
 import android.graphics.Color
 import android.graphics.Paint
 import androidx.camera.effects.Frame
 import androidx.camera.view.PreviewView
-import com.davidrevolt.feature.home.DetectorOverlayEffect
+import com.davidrevolt.playground.feature.camerax.detectors.DetectorOverlayEffect
 import com.google.mlkit.vision.face.Face
 import java.util.Locale
 

@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
@@ -7,17 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.davidrevolt.playground"
-    compileSdk = 35
+    namespace = "com.davidrevolt.playground.feature.camerax"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.davidrevolt.playground"
         minSdk = 28
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -51,9 +48,21 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.runtime.compose)
 
+    implementation(libs.accompanist.permissions)
+
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    // implementation(libs.androidx.camera.video)
+    // implementation(libs.androidx.camera.view)
+    // implementation(libs.androidx.camera.extensions)
+    implementation(libs.androidx.camera.effects)
+    implementation(libs.androidx.camera.mlkit.vision)
+    implementation(libs.face.detection)
+    implementation(libs.obj.detection)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -66,7 +75,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(project(":feature:home"))
-    implementation(project(":feature:camerax"))
 }

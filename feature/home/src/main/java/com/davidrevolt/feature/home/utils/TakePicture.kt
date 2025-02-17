@@ -1,4 +1,4 @@
-package com.davidrevolt.feature.home
+package com.davidrevolt.feature.home.utils
 
 import android.content.ContentValues
 import android.content.Context
