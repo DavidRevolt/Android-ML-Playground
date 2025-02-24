@@ -5,21 +5,25 @@ import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_VIEW_REFERENCED
-import androidx.camera.core.Preview
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.davidrevolt.playground.feature.camerax.detectors.DetectorProcessor
+import com.davidrevolt.playground.feature.camerax.detectors.customobjectdetector.CustomObjectDetectorProcessor
 import com.davidrevolt.playground.feature.camerax.detectors.facedetector.FaceDetectorProcessor
 import com.davidrevolt.playground.feature.camerax.detectors.objectdetector.ObjectDetectorProcessor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlin.reflect.KFunction1
 
 @HiltViewModel
 class CameraXViewModel @Inject constructor(
@@ -28,31 +32,46 @@ class CameraXViewModel @Inject constructor(
     ViewModel() {
 
     private var cameraController: LifecycleCameraController = LifecycleCameraController(context)
-    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+    private lateinit var cameraSelector: CameraSelector
+    private lateinit var availableCameraSelectors: List<CameraSelector>
 
     private var detectorProcessor: DetectorProcessor<*>? = null
-    private val preview = Preview.Builder().build()
-
+    private val availableDetectors = mutableListOf(
+        ::ObjectDetectorProcessor,
+        ::CustomObjectDetectorProcessor,
+        ::FaceDetectorProcessor
+    )
+    private var analysisExecutor = Executors.newSingleThreadExecutor()
 
     private val _cameraXUiState = MutableStateFlow<CameraXUiState>(CameraXUiState.Loading)
     val cameraXUiState = _cameraXUiState.asStateFlow()
 
 
-    // Setup the cameraController AFTER its finished the initialization
     init {
-        // What to do when cameraController finished the initialization:
+        // What to do when var cameraController finished the initialization:
         val cameraProviderFuture = LifecycleCameraController(context).initializationFuture
         cameraProviderFuture.addListener({
-            cameraController.cameraSelector = cameraSelector
+            try {
+                availableCameraSelectors = listOf(
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    CameraSelector.DEFAULT_FRONT_CAMERA
+                ).filter { cameraSelector ->
+                    cameraController.hasCamera(cameraSelector)
+                }
+                cameraSelector = availableCameraSelectors[0]
+                cameraController.cameraSelector = cameraSelector
 
-            var availableCameraSelectors = listOf(
-                CameraSelector.LENS_FACING_BACK,
-                CameraSelector.LENS_FACING_FRONT
-            ).filter { lensFacing ->
-                cameraController.hasCamera(cameraLensToCameraSelector(lensFacing))
+                // This guarantees only one image will be delivered for analysis at a time
+                cameraController.imageAnalysisBackpressureStrategy =
+                    ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
+                _cameraXUiState.value = CameraXUiState.Ready(
+                    availableDetectors.map(::getDetectorDescription)
+                )
+            } catch (e: Exception) {
+                Log.e(TAG, "cameraX Initialization failed: ${e.message}")
+                _cameraXUiState.value = CameraXUiState.Failure
             }
-            _cameraXUiState.value = CameraXUiState.Ready
-            //     _cameraXUiState.value = CameraXUiState.Data(availableCameraSelectors,cameraSelector.lensFacing )
+
         }, ContextCompat.getMainExecutor(context))
     }
 
@@ -62,63 +81,97 @@ class CameraXViewModel @Inject constructor(
         previewView: PreviewView,
         lifecycleOwner: LifecycleOwner
     ) {
-        preview.surfaceProvider = previewView.surfaceProvider
-        previewView.controller = cameraController // Connect CameraController to preview
-        cameraController.unbind()
-        cameraController.bindToLifecycle(lifecycleOwner) //Because cameraController is Lifecycle aware
+        viewModelScope.launch {
+            previewView.controller = cameraController // Connect CameraController to preview
+            cameraController.unbind()
+            cameraController.bindToLifecycle(lifecycleOwner) //Because cameraController is Lifecycle aware
+        }
     }
+
 
     // Setting Img Detector and EFFECT - DRAWING
-    fun bindAnalysisUseCase(previewView: PreviewView) {
-        stopAnalysisUseCase()
-        detectorProcessor = ObjectDetectorProcessor(previewView)
-        if ( detectorProcessor?.effect?.overlayEffect != null){
-            cameraController.setEffects(
-                setOf(detectorProcessor!!.effect!!.overlayEffect)
-            )
-        }
-
-
-        // IMG ANALYSIS
-        // This guarantees only one image will be delivered for analysis at a time
-        cameraController.imageAnalysisBackpressureStrategy = ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
-        val executor = context.mainExecutor
-        cameraController.setImageAnalysisAnalyzer(
-            executor,
-            MlKitAnalyzer(
-                listOf(detectorProcessor!!.detector),
-                COORDINATE_SYSTEM_VIEW_REFERENCED,
-                executor
-            ) { mlkitResult: MlKitAnalyzer.Result? ->
-                detectorProcessor!!.processMlKitAnalyzerResult(mlkitResult = mlkitResult)
+    fun bindAnalysisUseCase(
+        detectorIndex: Int,
+        previewView: PreviewView
+    ) {
+        try {
+            stopAnalysisUseCase()
+            detectorProcessor = availableDetectors[detectorIndex].invoke(previewView)
+            if (detectorProcessor?.effect?.overlayEffect != null) {
+                cameraController.setEffects(
+                    setOf(detectorProcessor!!.effect!!.overlayEffect)
+                )
             }
-        )
-    }
-    fun stopAnalysisUseCase(){
-        if (detectorProcessor != null) {
-            cameraController.clearEffects()
-            cameraController.clearImageAnalysisAnalyzer()
-            detectorProcessor!!.stop()
+
+            // IMG ANALYSIS
+            analysisExecutor = Executors.newSingleThreadExecutor()
+            cameraController.setImageAnalysisAnalyzer(
+                analysisExecutor,
+                MlKitAnalyzer(
+                    listOf(detectorProcessor!!.detector),
+                    COORDINATE_SYSTEM_VIEW_REFERENCED,
+                    analysisExecutor
+                ) { mlkitResult: MlKitAnalyzer.Result? ->
+                    detectorProcessor!!.processMlKitAnalyzerResult(mlkitResult = mlkitResult)
+                }
+            )
+        } catch (e: Exception) {
+            Log.e(TAG, "bindAnalysisUseCase failed: ${e.message}")
+            _cameraXUiState.value = CameraXUiState.Failure
         }
     }
 
-    private fun cameraLensToCameraSelector(lensFacing: Int): CameraSelector =
-        when (lensFacing) {
-            CameraSelector.LENS_FACING_FRONT -> CameraSelector.DEFAULT_FRONT_CAMERA
-            CameraSelector.LENS_FACING_BACK -> CameraSelector.DEFAULT_BACK_CAMERA
-            else -> throw IllegalArgumentException("Invalid lens facing type: $lensFacing")
+
+    fun stopAnalysisUseCase() {
+        viewModelScope.launch {
+            if (detectorProcessor != null) {
+                cameraController.clearImageAnalysisAnalyzer()
+                cameraController.clearEffects()
+                //  analysisExecutor.shutdownNow()
+                detectorProcessor!!.stop()
+            }
         }
 
+    }
 
+    private fun getDetectorDescription(constructor: KFunction1<PreviewView, DetectorProcessor<out Any>>): String =
+        when (constructor) {
+            ::ObjectDetectorProcessor -> "Object Detection"
+            ::CustomObjectDetectorProcessor -> "Custom Object Detection"
+            ::FaceDetectorProcessor -> "Face Detection"
+            else -> "Unknown Detector: ${constructor.javaClass.name}"
+        }
+
+    fun flipCamera() {
+        viewModelScope.launch {
+            // Toggle between front and back camera
+            val newCameraSelector =
+                if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA)
+                    CameraSelector.DEFAULT_FRONT_CAMERA
+                else {
+                    CameraSelector.DEFAULT_BACK_CAMERA
+                }
+            if (cameraController.hasCamera(newCameraSelector)) {
+                cameraController.cameraSelector = newCameraSelector
+                cameraSelector = newCameraSelector
+            } else {
+                Log.e(TAG, "Failed to flip camera: device doesn't have $newCameraSelector")
+            }
+        }
+    }
+
+    companion object {
+        private const val TAG = "ImageAnalysis"
+    }
 }
 
 
 sealed interface CameraXUiState {
-    data class Data(val availableCameraSelectors: List<Int>, val cameraSelector: Int) :
+    data class Ready(val availableDetectors: List<String>) :
         CameraXUiState
 
-    data object Ready : CameraXUiState
     data object Loading : CameraXUiState
     data object Failure : CameraXUiState
 
 }
+

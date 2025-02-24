@@ -14,23 +14,14 @@ class ObjectDetectorProcessor(previewView: PreviewView) : DetectorProcessor<Dete
     override val effect: DetectorOverlayEffect<DetectedObject>?
 
     init {
-        // Multiple object detection in static images
+        Log.i(TAG, "Init Object Detector Processor")
         val options = ObjectDetectorOptions.Builder()
             .setDetectorMode(ObjectDetectorOptions.STREAM_MODE)
             .enableMultipleObjects()
             .enableClassification()
             .build()
         detector = ObjectDetection.getClient(options)
-        effect = null
+        effect =ObjectOverlayEffect(previewView = previewView)
     }
 
-    override fun onSuccess(detections: List<DetectedObject>, frameTimestamp: Long) {
-        super.onSuccess(detections, frameTimestamp)
-        //   Log.d("Tes0t","Detected: ${detections.size} Instances")
-        detections.forEach { detectedObject ->
-            detectedObject.labels.forEach { label ->
-                Log.d("Tes0t", label.text)
-            }
-        }
-    }
 }

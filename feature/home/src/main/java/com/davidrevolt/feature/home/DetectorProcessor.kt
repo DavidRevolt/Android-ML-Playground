@@ -1,7 +1,6 @@
 package com.davidrevolt.feature.home
 
 import androidx.camera.mlkit.vision.MlKitAnalyzer
-import com.davidrevolt.feature.home.facedetector.FaceOverlayEffect
 import com.google.mlkit.vision.interfaces.Detector
 
 /*

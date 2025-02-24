@@ -17,14 +17,15 @@ hiltNavigationCompose = "1.2.0"
 ksp = "2.0.21-1.0.27"
 
 androidxNavigation = "2.8.4"
-
 androidx-lifecycle = "2.8.7"
 
 accompanist-permissions = "0.36.0"
 
+
 cameraX = "1.5.0-alpha03"
 faceDetection = "16.1.7"
 objectDetection = "17.0.2"
+objectDetectionCustom= "17.0.2"
 
 appcompat = "1.7.0"
 material = "1.12.0"
@@ -67,6 +68,7 @@ androidx-camera-effects = { group = "androidx.camera", name = "camera-effects", 
 androidx-camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "cameraX" }
 face-detection = { group = "com.google.mlkit", name = "face-detection", version.ref = "faceDetection" }
 obj-detection = { group = "com.google.mlkit", name = "object-detection", version.ref = "objectDetection" }
+obj-detection-custom = { group = "com.google.mlkit", name = "object-detection-custom", version.ref = "objectDetectionCustom" }
 
 
 # Others

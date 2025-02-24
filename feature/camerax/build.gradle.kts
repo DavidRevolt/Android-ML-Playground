@@ -36,6 +36,7 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
@@ -60,6 +61,8 @@ dependencies {
     implementation(libs.androidx.camera.mlkit.vision)
     implementation(libs.face.detection)
     implementation(libs.obj.detection)
+    implementation(libs.obj.detection.custom)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
