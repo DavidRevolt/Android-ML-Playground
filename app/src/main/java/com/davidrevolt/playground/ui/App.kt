@@ -4,10 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.davidrevolt.playground.navigation.AppNavigation
+import com.davidrevolt.playground.navigation.AppNavHost
 
 
 @Composable
@@ -16,7 +15,7 @@ fun App(appState: AppState = rememberAppState()) {
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            AppNavigation(appState = appState)
+            AppNavHost(appState = appState)
         }
     }
 }
