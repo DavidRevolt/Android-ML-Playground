@@ -1,8 +1,9 @@
-# ML-Playground: CameraX MLKit Detection App
+# Playground: CameraX MLKit Detection App
 
 An Android app built with MVVM architecture, utilizing **CameraX** and **Google MLKit** for real-time image analysis.
+
 The app features multiple detectors: a custom object detector using an **EfficientNet** custom model, a general object detector using a pre-built MLKit model and a face detector.
-It displays a live camera feed with overlay effects showing detection details (e.g., bounding boxes and probability of smiling for face detection).
+**It displays a live camera feed with overlay effects showing detection details** (e.g., bounding boxes and probability of smiling for face detection).
 
 The app is **modularized**, allowing the CameraX module to be imported into other existing apps.
 It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Kotlin** as the programming language, and **Google Accompanist** for runtime permissions support.
