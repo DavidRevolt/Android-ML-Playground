@@ -32,25 +32,6 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
 - **Permissions Handling**: [Google Accompanist](https://github.com/google/accompanist) 
 
 
-## Project Structure
-
-app/
-└── feature/
-    ├── camerax/                  # CameraX module implementation
-    │   └── assets/
-    │       └── custom_models/    # Location of the **EfficientNet** custom model
-    │
-    └── home/                     # Home module - contains runtime permissions handling
-
-    .
-    ├── build                   # Compiled files (alternatively `dist`)
-    ├── docs                    # Documentation files (alternatively `doc`)
-    ├── src                     # Source files (alternatively `lib` or `app`)
-    ├── test                    # Automated tests (alternatively `spec` or `tests`)
-    ├── tools                   # Tools and utilities
-    ├── LICENSE
-    └── README.md
-
 ## Custom Models
 The custom object detector uses an **EfficientNet** model stored at:  
 `feature/camerax/assets/custom_models/`
@@ -58,3 +39,12 @@ The custom object detector uses an **EfficientNet** model stored at:
 Additional models can be downloaded from **TensorFlow Hub**:  
 [Image Classification Collection](https://tfhub.dev/ml-kit/collections/image-classification/1)
 
+
+## Project Structure
+    app/
+    └── feature/
+         ├── camerax/                  # CameraX module implementation
+         │   └── assets/
+         │       └── custom_models/    # Location of the **EfficientNet** custom model
+         │
+         └── home/                     # Home module - contains runtime permissions handling
