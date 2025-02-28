@@ -1,4 +1,4 @@
-# Playground: CameraX MLKit Detection App
+# Playground Detection App
 
 An Android app built with MVVM architecture, utilizing **CameraX** and **Google MLKit** for real-time image analysis.
 
@@ -15,10 +15,10 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
     - **Custom Object Detector**: Uses a custom EfficientNet model.
     - **General Object Detector**: Uses MLKit's pre-built model.
     - **Face Detector**: Detects faces with facial landmarks and expressions (e.g., smile detection).
-- **Dynamic Detector Selection***: Users can switch between detectors.
-- **Overlay Effects for Detection Results**: Draw bounding boxes, detection details and display confidence scores on the live feed..
+- **Dynamic Detector Selection**: Users can switch between detectors.
+- **Overlay Effects for Detection Results**: Draw bounding boxes and detection details (e.g., confidence scores) on the live feed.
 - **Camera Lens Switching**: Toggle between front and back cameras.
-- **Generic Programming**: Detectors inherit from a base class for easy extensibility
+- **Generic Programming**: Detectors inherit from a base class to simplify adding new types.
 - **Modular Design**: The CameraX module is reusable in other projects.
 
 ## Tech Stack
@@ -33,6 +33,7 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
 
 
 ## Project Structure
+
 app/
 └── feature/
     ├── camerax/                  # CameraX module implementation
@@ -41,6 +42,14 @@ app/
     │
     └── home/                     # Home module - contains runtime permissions handling
 
+    .
+    ├── build                   # Compiled files (alternatively `dist`)
+    ├── docs                    # Documentation files (alternatively `doc`)
+    ├── src                     # Source files (alternatively `lib` or `app`)
+    ├── test                    # Automated tests (alternatively `spec` or `tests`)
+    ├── tools                   # Tools and utilities
+    ├── LICENSE
+    └── README.md
 
 ## Custom Models
 The custom object detector uses an **EfficientNet** model stored at:  
