@@ -14,7 +14,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onCameraPermissionGranted: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -22,7 +23,7 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
            RequestCameraAndMicPermissions() {
-               CameraXLivePreview()
+               onCameraPermissionGranted.invoke()
            }
     }
 }

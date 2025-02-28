@@ -11,8 +11,8 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
     this.navigate(HOME_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.homeScreen() {
+fun NavGraphBuilder.homeScreen(onCameraPermissionGranted: () -> Unit) {
     composable(route = HOME_ROUTE) {
-        HomeScreen()
+        HomeScreen(onCameraPermissionGranted = onCameraPermissionGranted)
     }
 }

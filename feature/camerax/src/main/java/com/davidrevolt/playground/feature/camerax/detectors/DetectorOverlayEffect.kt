@@ -21,7 +21,7 @@ abstract class DetectorOverlayEffect<T>(private val previewView: PreviewView) {
     private var detections: List<T> = emptyList()
     private var frameTimestamp = 0L
 
-    // overlayEffect passed to cameraController.setEffects()
+    // overlayEffect - Use to draw overlay! passed to cameraController.setEffects()
     val overlayEffect =
         OverlayEffect(CameraEffect.PREVIEW, 5, Handler(Looper.getMainLooper()), {}).also { it ->
             it.setOnDrawListener { frame ->
@@ -36,6 +36,7 @@ abstract class DetectorOverlayEffect<T>(private val previewView: PreviewView) {
                 )
                 detections.let { //Draw Again
                     // Using sensor coordinates to draw.
+                    // The goal is to line up the camera’s real view with the overlay you’re drawing on
                     val sensorToUi = previewView.sensorToViewTransform
                     val sensorToEffect = frame.sensorToBufferTransform
                     val uiToSensor = Matrix()

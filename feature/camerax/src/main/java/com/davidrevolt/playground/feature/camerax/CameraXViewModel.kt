@@ -52,6 +52,7 @@ class CameraXViewModel @Inject constructor(
         val cameraProviderFuture = LifecycleCameraController(context).initializationFuture
         cameraProviderFuture.addListener({
             try {
+                cameraProviderFuture.get()
                 availableCameraSelectors = listOf(
                     CameraSelector.DEFAULT_BACK_CAMERA,
                     CameraSelector.DEFAULT_FRONT_CAMERA
@@ -97,9 +98,10 @@ class CameraXViewModel @Inject constructor(
         try {
             stopAnalysisUseCase()
             detectorProcessor = availableDetectors[detectorIndex].invoke(previewView)
+
             if (detectorProcessor?.effect?.overlayEffect != null) {
                 cameraController.setEffects(
-                    setOf(detectorProcessor!!.effect!!.overlayEffect)
+                  setOf(detectorProcessor!!.effect!!.overlayEffect)
                 )
             }
 

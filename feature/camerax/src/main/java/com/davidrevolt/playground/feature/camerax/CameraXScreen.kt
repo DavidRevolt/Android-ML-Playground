@@ -3,7 +3,6 @@ package com.davidrevolt.playground.feature.camerax
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -67,13 +67,16 @@ fun CameraXScreen(
     val lazyListState = rememberLazyListState() // Manage LazyRow scroll state for detector list
     val coroutineScope = rememberCoroutineScope() // For programmatic scrolling
 
-    when (uiState) {
-        is CameraXUiState.Ready -> {
-
-            val detectorsList = (uiState as CameraXUiState.Ready).availableDetectors
-            Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        when (uiState) {
+            is CameraXUiState.Ready -> {
+                val detectorsList = (uiState as CameraXUiState.Ready).availableDetectors
                 AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
-                // Initial setup
+                // CAMERAX Initial setup
                 LaunchedEffect(Unit) {
                     bindPreviewUseCase(previewView, lifecycleOwner)
                     if (detectorsList.isNotEmpty()) {
@@ -85,7 +88,7 @@ fun CameraXScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                 ) {
-                    // Flip button
+                    // Flip Camera button
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -124,31 +127,43 @@ fun CameraXScreen(
                                     selectedDetectorIndex = index
                                     selectDetector(index, previewView)
                                     coroutineScope.launch {
-                                        scrollToCenterOfListItem(selectedDetectorIndex,lazyListState)
-/*                                        val itemInfo =
-                                            lazyListState.layoutInfo.visibleItemsInfo.find { it.index == index }
-                                        itemInfo?.let {
-                                            val itemCenter = it.offset + it.size / 2
-                                            val viewportCenter =
-                                                (lazyListState.layoutInfo.viewportEndOffset - lazyListState.layoutInfo.viewportStartOffset) / 2
-                                            val scrollOffset = itemCenter - viewportCenter
-                                            lazyListState.animateScrollToItem(index, scrollOffset)
-                                        }*/
+                                        scrollToCenterOfListItem(
+                                            selectedDetectorIndex,
+                                            lazyListState
+                                        )
                                     }
                                 }
                             )
                         }
                     }
                 }
-            }
-            LaunchedEffect(Unit) {
-                coroutineScope.launch{
-                    scrollToCenterOfListItem(selectedDetectorIndex,lazyListState,false)
+
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        scrollToCenterOfListItem(selectedDetectorIndex, lazyListState, false)
+                    }
                 }
             }
-        }
 
-        else -> {}
+            is CameraXUiState.Loading -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) { CircularProgressIndicator() }
+            }
+
+            else -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) { Text("CameraX init failure, see logs for details", color = Color.White) }
+
+            }
+        }
     }
 }
 
@@ -189,7 +204,11 @@ fun DetectorItem(
 }
 
 // Scroll to center the text of the selected item
-private suspend fun scrollToCenterOfListItem(itemIndex: Int, lazyListState: LazyListState, animate: Boolean = true) {
+private suspend fun scrollToCenterOfListItem(
+    itemIndex: Int,
+    lazyListState: LazyListState,
+    animate: Boolean = true
+) {
     val itemInfo =
         lazyListState.layoutInfo.visibleItemsInfo.find { it.index == itemIndex }
     itemInfo?.let {
@@ -202,8 +221,8 @@ private suspend fun scrollToCenterOfListItem(itemIndex: Int, lazyListState: Lazy
             lazyListState.layoutInfo.viewportEndOffset - lazyListState.layoutInfo.viewportStartOffset
         val effectiveViewportCenter = (viewportWidth - totalPadding) / 2
         val scrollOffset = itemCenter - effectiveViewportCenter.toInt()
-        if(animate)
-        lazyListState.animateScrollToItem(itemIndex, scrollOffset)
+        if (animate)
+            lazyListState.animateScrollToItem(itemIndex, scrollOffset)
         else
             lazyListState.scrollToItem(itemIndex, scrollOffset)
     }
