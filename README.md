@@ -1,6 +1,6 @@
 # Playground Detection App
 
-An Android app built with MVVM architecture, utilizing **CameraX** and **Google MLKit** for real-time image analysis.
+An Android app built with MVVM architecture, utilizing **CameraX** and **Google ML Kit** for real-time image analysis.
 
 The app features multiple detectors: a custom object detector using an **EfficientNet** custom model, a general object detector using a pre-built MLKit model and a face detector.
 **It displays a live camera feed with overlay effects showing detection details** (e.g., bounding boxes and probability of smiling for face detection).
@@ -13,7 +13,7 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
 - **Live Camera Feed**: Real-time preview powered by CameraX framework.
 - **Multiple Image Detectors**:
     - **Custom Object Detector**: Uses a custom EfficientNet model.
-    - **General Object Detector**: Uses MLKit's pre-built model.
+    - **General Object Detector**: Uses ML Kit's pre-built model.
     - **Face Detector**: Detects faces with facial landmarks and expressions (e.g., smile detection).
 - **Dynamic Detector Selection**: Users can switch between detectors.
 - **Overlay Effects for Detection Results**: Draw bounding boxes and detection details (e.g., confidence scores) on the live feed.
@@ -28,7 +28,7 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
 - **UI**: Jetpack Compose
 - **Dependency Injection**: [Hilt](https://developer.android.com/training/dependency-injection/hilt-jetpack)
 - **Camera Framework**: [CameraX](https://developer.android.com/media/camera/camerax)
-- **Machine Learning**: [Google ML-Kit](https://developers.google.com/ml-kit/guides)
+- **Machine Learning**: [Google ML Kit](https://developers.google.com/ml-kit/guides)
 - **Permissions Handling**: [Google Accompanist](https://github.com/google/accompanist) 
 
 

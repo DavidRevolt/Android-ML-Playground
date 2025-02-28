@@ -5,7 +5,7 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 import com.google.mlkit.vision.interfaces.Detector
 
 /*
-* Base class to init MLKIT Detector and OverLay Effect
+* Base class to init ML KIT Detector and OverLay Effect
 * T - The detected object, e.g: Face/DetectedObject
 * */
 abstract class DetectorProcessor<T>() {
