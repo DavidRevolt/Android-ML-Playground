@@ -1,4 +1,4 @@
-# Playground Detection App
+# 📸 Playground Detection App
 
 An Android app built with MVVM architecture, utilizing **CameraX** and **Google ML Kit** for real-time image analysis.
 
@@ -8,7 +8,7 @@ The app features multiple detectors: a custom object detector using an **Efficie
 The app is **modularized**, allowing the CameraX module to be imported into other existing apps.
 It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Kotlin** as the programming language, and **Google Accompanist** for runtime permissions support.
 
-## Features
+## 🚀 Features
 
 - **Live Camera Feed**: Real-time preview powered by CameraX framework.
 - **Multiple Image Detectors**:
@@ -18,10 +18,10 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
 - **Dynamic Detector Selection**: Users can switch between detectors.
 - **Overlay Effects for Detection Results**: Draw bounding boxes and detection details (e.g., confidence scores) on the live feed.
 - **Camera Lens Switching**: Toggle between front and back cameras.
-- **Generic Programming**: Detectors inherit from a base class to simplify adding new types.
-- **Modular Design**: The CameraX module is reusable in other projects.
+- **Generic Programming**: New ML Kit detectors (e.g., Barcode, Pose Detector) can be easily integrated.
+- **Modular Design**: CameraX module can be easily imported into other apps for camera-based image analysis.
 
-## Tech Stack
+## 📦 Tech Stack
 
 - **Architecture**: MVVM
 - **Language**: Kotlin
@@ -32,7 +32,7 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
 - **Permissions Handling**: [Google Accompanist](https://github.com/google/accompanist) 
 
 
-## Custom Models
+## 🔧 Custom Models
 The custom object detector uses an **EfficientNet** model stored at:  
 `feature/camerax/assets/custom_models/`
 

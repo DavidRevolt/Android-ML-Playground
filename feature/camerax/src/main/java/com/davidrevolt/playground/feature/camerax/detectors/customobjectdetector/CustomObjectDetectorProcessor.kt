@@ -24,7 +24,7 @@ class CustomObjectDetectorProcessor(previewView: PreviewView) : DetectorProcesso
             .setDetectorMode(CustomObjectDetectorOptions.STREAM_MODE)
             .enableClassification()
             .enableMultipleObjects()
-            .setClassificationConfidenceThreshold(0.3f)
+            .setClassificationConfidenceThreshold(0.4f)
             .setMaxPerObjectLabelCount(5) //  If not set, the default value of 10 will be used.
             .build()
         detector = ObjectDetection.getClient(options)

@@ -92,7 +92,7 @@ fun CameraXScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.End
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_camera_flip_android),
