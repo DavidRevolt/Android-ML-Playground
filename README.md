@@ -1,4 +1,4 @@
-# 📸 Playground Detection App
+# 📸 Playground Detection App [App Icon](https://raw.githubusercontent.com/DavidRevolt/Android-ML-Playground/refs/heads/master/app/src/main/res/mipmap-hdpi/app_icon_round.webp)
 
 An Android app built with MVVM architecture, utilizing **CameraX** and **Google ML Kit** for real-time image analysis.
 
