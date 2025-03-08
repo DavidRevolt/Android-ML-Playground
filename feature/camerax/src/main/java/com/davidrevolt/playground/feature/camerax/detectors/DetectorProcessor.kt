@@ -27,10 +27,7 @@ abstract class DetectorProcessor<T>() {
     }
 
     protected open fun onFailure(throwable: Throwable?) {
-        Log.e(
-            TAG,
-            "Detection failed ${throwable?.cause.toString()}"
-        )
+        Log.e(TAG, "Detection failed ${throwable?.cause.toString()}")
     }
 
 
