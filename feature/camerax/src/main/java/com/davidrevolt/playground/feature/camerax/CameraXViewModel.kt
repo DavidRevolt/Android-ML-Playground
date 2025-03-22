@@ -41,7 +41,6 @@ class CameraXViewModel @Inject constructor(
         ::CustomObjectDetectorProcessor,
         ::FaceDetectorProcessor
     )
-    private var analysisExecutor = Executors.newSingleThreadExecutor()
 
     private val _cameraXUiState = MutableStateFlow<CameraXUiState>(CameraXUiState.Loading)
     val cameraXUiState = _cameraXUiState.asStateFlow()
@@ -85,7 +84,7 @@ class CameraXViewModel @Inject constructor(
         viewModelScope.launch {
             previewView.controller = cameraController // Connect CameraController to preview
             cameraController.unbind()
-            cameraController.bindToLifecycle(lifecycleOwner) //Because cameraController is Lifecycle aware
+            cameraController.bindToLifecycle(lifecycleOwner) // CameraController is Lifecycle aware
         }
     }
 
@@ -101,12 +100,12 @@ class CameraXViewModel @Inject constructor(
 
             if (detectorProcessor?.effect?.overlayEffect != null) {
                 cameraController.setEffects(
-                  setOf(detectorProcessor!!.effect!!.overlayEffect)
+                    setOf(detectorProcessor!!.effect!!.overlayEffect)
                 )
             }
 
             // IMG ANALYSIS
-            analysisExecutor = Executors.newSingleThreadExecutor()
+            val analysisExecutor = Executors.newSingleThreadExecutor()
             cameraController.setImageAnalysisAnalyzer(
                 analysisExecutor,
                 MlKitAnalyzer(
@@ -124,12 +123,12 @@ class CameraXViewModel @Inject constructor(
     }
 
 
-    fun stopAnalysisUseCase() {
+    private fun stopAnalysisUseCase() {
         viewModelScope.launch {
             if (detectorProcessor != null) {
                 cameraController.clearImageAnalysisAnalyzer()
                 cameraController.clearEffects()
-                //  analysisExecutor.shutdownNow()
+                //  analysisExecutor.shutdownNow() // should be auto shot down when set new analyzer
                 detectorProcessor!!.stop()
             }
         }

@@ -120,7 +120,7 @@ class CustomObjectOverlayEffect(previewView: PreviewView) :
             )
             yTextLineOffset += yTextLineOffset
             labels.forEachIndexed { ind, label ->
-                val labelText = label.text + " " + String.format(
+                val labelText = label.text + " | " + String.format(
                     Locale.US,
                     LABEL_FORMAT,
                     label.confidence * 100,

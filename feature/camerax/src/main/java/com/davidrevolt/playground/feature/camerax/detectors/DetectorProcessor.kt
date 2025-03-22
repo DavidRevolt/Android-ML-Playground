@@ -13,7 +13,7 @@ abstract class DetectorProcessor<T>() {
     abstract val effect: DetectorOverlayEffect<T>? // e.g DetectorOverlayEffect<Face>
 
     fun processMlKitAnalyzerResult(mlkitResult: MlKitAnalyzer.Result?) {
-        var detections = mlkitResult?.getValue(detector)// e.g: List of faces
+        val detections = mlkitResult?.getValue(detector)// e.g: List of faces
         if (detections == null)
             onFailure(mlkitResult?.getThrowable(detector))
         else
@@ -39,6 +39,6 @@ abstract class DetectorProcessor<T>() {
     }
 
     companion object {
-        protected const val TAG = "ImageAnalysis"
+        const val TAG = "ImageAnalysis"
     }
 }

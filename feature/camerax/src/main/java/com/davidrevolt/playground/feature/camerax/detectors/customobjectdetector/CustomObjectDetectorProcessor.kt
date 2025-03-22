@@ -10,7 +10,8 @@ import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 
-class CustomObjectDetectorProcessor(previewView: PreviewView) : DetectorProcessor<DetectedObject>() {
+class CustomObjectDetectorProcessor(previewView: PreviewView) :
+    DetectorProcessor<DetectedObject>() {
     override val detector: ObjectDetector
     override val effect: DetectorOverlayEffect<DetectedObject>?
 
@@ -28,8 +29,6 @@ class CustomObjectDetectorProcessor(previewView: PreviewView) : DetectorProcesso
             .setMaxPerObjectLabelCount(5) //  If not set, the default value of 10 will be used.
             .build()
         detector = ObjectDetection.getClient(options)
-        effect =  CustomObjectOverlayEffect(previewView = previewView)
+        effect = CustomObjectOverlayEffect(previewView = previewView)
     }
-
-
 }

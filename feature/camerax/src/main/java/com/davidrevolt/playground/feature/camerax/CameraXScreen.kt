@@ -55,13 +55,11 @@ fun CameraXScreen(
     val uiState by viewModel.cameraXUiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val previewView: PreviewView = PreviewView(context)
-
-
     val bindPreviewUseCase: (PreviewView, LifecycleOwner) -> Unit = viewModel::bindPreviewUseCase
     val selectDetector: (Int, PreviewView) -> Unit = viewModel::bindAnalysisUseCase
     val flipCamera = viewModel::flipCamera
 
+    val previewView = PreviewView(context)
 
     var selectedDetectorIndex by remember { mutableIntStateOf(-1) }
     val lazyListState = rememberLazyListState() // Manage LazyRow scroll state for detector list
@@ -220,7 +218,7 @@ private suspend fun scrollToCenterOfListItem(
         val viewportWidth =
             lazyListState.layoutInfo.viewportEndOffset - lazyListState.layoutInfo.viewportStartOffset
         val effectiveViewportCenter = (viewportWidth - totalPadding) / 2
-        val scrollOffset = itemCenter - effectiveViewportCenter.toInt()
+        val scrollOffset = itemCenter - effectiveViewportCenter
         if (animate)
             lazyListState.animateScrollToItem(itemIndex, scrollOffset)
         else
