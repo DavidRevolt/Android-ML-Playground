@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/DavidRevolt/Android-ML-Playground/refs/heads/master/app/src/main/res/mipmap-hdpi/app_icon_round.webp" width="35" height="35" alt="App Icon" style="vertical-align:middle;"> Playground Detection App 
+# <img src="https://raw.githubusercontent.com/DavidRevolt/Android-ML-Playground/refs/heads/master/app/src/main/res/mipmap-hdpi/app_icon_round.webp" width="30" height="30" alt="App Icon" style="vertical-align:middle;"> Playground Detection App 
 An Android app built with MVVM architecture, utilizing **CameraX** and **Google ML Kit** for real-time image analysis.
 
 The app features multiple detectors: a custom object detector using an **EfficientNet** custom model, a general object detector using a pre-built MLKit model and a face detector.
@@ -19,6 +19,12 @@ It leverages **Hilt** for dependency injection, **Jetpack Compose** for UI, **Ko
 - **Camera Lens Switching**: Toggle between front and back cameras.
 - **Generic Programming**: New ML Kit detectors (e.g., Barcode, Pose Detector) can be easily integrated.
 - **Modular Design**: CameraX module can be easily imported into other apps for camera-based image analysis.
+
+
+## 📸 Screenshots
+
+  <img src="assets/chicko.jpeg" width="220">
+
 
 ## 📦 Tech Stack
 

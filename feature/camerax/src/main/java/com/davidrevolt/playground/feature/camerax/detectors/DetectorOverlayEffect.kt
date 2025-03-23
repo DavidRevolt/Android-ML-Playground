@@ -43,7 +43,7 @@ abstract class DetectorOverlayEffect<T>(private val previewView: PreviewView) {
                     sensorToUi?.invert(uiToSensor)
                     uiToSensor.postConcat(sensorToEffect)
                     frame.overlayCanvas.setMatrix(uiToSensor)
-                    drawOnDetections(it,frame) // Abstract fun should be implemented what to draw
+                    drawOnDetections(it, frame) // Abstract fun should be implemented what to draw
                 }
                 true
             }
